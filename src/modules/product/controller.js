@@ -108,3 +108,25 @@ exports.revokeProduct = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+exports.deleteProduct = async (req, res) => {
+  try {
+    const result = await productService.deleteProduct(
+      req.params.productId
+    );
+
+    res.json({
+      success: true,
+      message: "Product deleted successfully",
+      data: result,
+    });
+  } catch (err) {
+    console.error("DELETE PRODUCT ERROR:", err.message);
+
+    res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+

@@ -41,6 +41,7 @@ router.patch(
   productController.updateProduct
 );
 
+
 /* REVOKE PRODUCT */
 router.patch(
   "/:productId/revoke",
@@ -48,5 +49,15 @@ router.patch(
   adminOnly,
   productController.revokeProduct
 );
+
+
+/* DELETE PRODUCT (ONLY DRAFT) */
+router.delete(
+  "/:productId",
+  protect,
+  adminOnly,
+  productController.deleteProduct
+);
+
 
 module.exports = router;

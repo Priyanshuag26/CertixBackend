@@ -63,3 +63,39 @@ exports.revokeProduct = async (productId) => {
 
   return product;
 };
+
+/* DELETE PRODUCT (ONLY IF DRAFT) */
+exports.deleteProduct = async (productId) => {
+  // 1. Find product
+  const product = await Product.findOne({ productId });
+  if (!product) throw new Error("Product not found");
+
+  // 2. Business rule
+  if (product.status !== "DRAFT") {
+    throw new Error(
+      "Only DRAFT products can be deleted. Certified or revoked products must be kept for audit."
+    );
+  }
+
+  // 3. Delete related certificate if exists (defensive)
+  const deletedCertificate = await Certificate.findOneAndDelete({
+    productId,
+  });
+
+  // 4. Optional: delete product image file
+  // if (product.image) {
+  //   try {
+  //     fs.unlinkSync(path.join("src", product.image));
+  //   } catch (err) {
+  //     console.warn("Failed to delete image file:", err.message);
+  //   }
+  // }
+
+  // 5. Delete product
+  await Product.deleteOne({ productId });
+
+  return {
+    productId,
+    certificateDeleted: !!deletedCertificate,
+  };
+};

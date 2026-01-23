@@ -3,6 +3,7 @@ const verifyService = require("./service");
 
 exports.verifyProduct = async (req, res) => {
   const result = await verifyService.verifyProduct(req.params.productId);
+  console.log("VERIFY RESPONSE DATA:", result.data);
 
   if (!result.valid) {
     return res.status(400).json({

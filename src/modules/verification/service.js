@@ -39,15 +39,17 @@ exports.verifyProduct = async (productId) => {
 
   /* 4. Recompute hash */
   const recomputedHash = crypto
-    .createHash("sha256")
-    .update(
-      JSON.stringify({
-        productId: product.productId,
-        weightGrams: product.weightGrams,
-        certificateId: certificate.certificateId,
-      })
-    )
-    .digest("hex");
+  .createHash("sha256")
+  .update(
+    JSON.stringify({
+      productId: product.productId,
+      weightGrams: product.weightGrams,
+      faces: product.faces,                     // ✅ ADD THIS
+      certificateId: certificate.certificateId,
+    })
+  )
+  .digest("hex");
+
 
   /* 5. Hash comparison */
   if (recomputedHash !== certificate.dataHash) {
@@ -58,16 +60,33 @@ exports.verifyProduct = async (productId) => {
   }
 
   /* 6. AUTHENTIC */
-  return {
-    valid: true,
-    data: {
-      productId: product.productId,
-      weightGrams: product.weightGrams,
-      shape: product.shape,
-      color: product.color,
-      mounted: product.mounted,
-      certificateId: certificate.certificateId,
-      issuedAt: certificate.issuedAt,
-    },
-  };
+ return {
+  valid: true,
+  data: {
+    /* Product */
+    productId: product.productId,
+    weightGrams: product.weightGrams,
+    shape: product.shape,
+    color: product.color,
+    measurement: product.measurement,
+    mounted: product.mounted,
+    faces: product.faces,
+    xRays: product.xRays,
+    createdFace: product.createdFace,
+    test: product.test,
+    comments: product.comments,
+    identification: product.identification,
+    image: product.image,
+
+    /* Certificate */
+    certificateId: certificate.certificateId,
+    issuedAt: certificate.issuedAt,
+    verificationUrl: certificate.verificationUrl,
+    certificatePdfUrl: certificate.certificatePdfUrl,
+
+    /* System */
+    status: product.status,
+  },
+};
+
 };

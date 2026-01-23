@@ -198,7 +198,7 @@ exports.generateCertificateImage = async ({
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: min-content;
-    gap: 12px 20px;
+    gap: 18px 20px;
   }
 
   .field {
@@ -208,7 +208,7 @@ exports.generateCertificateImage = async ({
 
   .label {
     display: block;
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     color: #C5A059;
     font-weight: 800;
@@ -216,7 +216,7 @@ exports.generateCertificateImage = async ({
   }
 
   .value {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
     color: #0F172A;
   }
