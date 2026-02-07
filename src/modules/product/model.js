@@ -28,8 +28,7 @@ const productSchema = new mongoose.Schema(
     },
 
     mounted: {
-      type: Boolean,
-      default: false,
+      type: String,
     },
 
     faces: {

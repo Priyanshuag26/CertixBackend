@@ -10,6 +10,20 @@ const {
   generateCertificateImage,
 } = require("./generator");
 
+const { getNextSequence } = require("./getNextSequence");
+
+function formatCertNumber(seq, region = "UK") {
+  const now = new Date();
+
+  const year = now.getFullYear().toString().slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+
+  const padded = String(seq).padStart(6, "0");
+
+  return `${year}${month}${region}${padded}`;
+}
+
+
 exports.generateCertificate = async (productId, adminId) => {
   const product = await Product.findOne({ productId });
 
@@ -21,7 +35,10 @@ exports.generateCertificate = async (productId, adminId) => {
     throw new Error("Certificate already generated or product revoked");
   }
 
-  const certificateId = uuidv4();
+  const seq = await getNextSequence("certificate");
+
+  const certificateId = formatCertNumber(seq, "UK");
+
 
   const verificationUrl =
     `${process.env.BASE_URL}/verify/${product.productId}`;

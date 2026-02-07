@@ -5,13 +5,9 @@ const fs = require("fs");
 
 /* ---------------- QR CODE (SVG STRING) ---------------- */
 exports.generateQRCode = async (verificationUrl, certificateId) => {
-
   const fileName = `qr-${certificateId}.png`;
 
-  const filePath = path.join(
-    __dirname,
-    `../../uploads/${fileName}`
-  );
+  const filePath = path.join(__dirname, `../../uploads/${fileName}`);
 
   await QRCode.toFile(filePath, verificationUrl, {
     margin: 1,
@@ -32,7 +28,9 @@ exports.generateCertificateImage = async ({
   const HEIGHT_MM = 52 * SCALE;
 
   const logoUrl = "http://localhost:5000/uploads/logo.png";
-  const productImage = product.image ? `http://localhost:5000/${product.image}` : null;
+  const productImage = product.image
+    ? `http://localhost:5000/${product.image}`
+    : null;
 
   const html = `
 <!DOCTYPE html>
@@ -93,12 +91,20 @@ exports.generateCertificateImage = async ({
   }
 
   .brand-name {
-    font-family: 'Cinzel', serif;
-    font-size: 32px;
-    color: #0F172A;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-  }
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  color: #C00000; /* RED */
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+  .brand-strip {
+  background: #C00000;
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 6px;
+}
 
   .brand-sub {
     font-size: 14px;
@@ -128,20 +134,19 @@ exports.generateCertificateImage = async ({
   }
 
   .cert-number {
-    font-size: 20px;
-    font-weight: 800;
-    color: #0F172A;
-    line-height: 1;
-  }
+  font-size: 20px;
+  font-weight: 800;
+  color: #1D4ED8; /* BLUE */
+  line-height: 1;
+}
 
   /* ================= MAIN BODY ================= */
   .main {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-    gap: 20px;
-    z-index: 2;
-  }
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 25px;
+}
 
   /* LEFT SIDE: Image & QR */
   .sidebar {
@@ -194,32 +199,40 @@ exports.generateCertificateImage = async ({
 
   /* RIGHT SIDE: All Data Fields */
   .data-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: min-content;
-    gap: 18px 20px;
-  }
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
   .field {
-    border-bottom: 1px solid #E2E8F0;
-    padding-bottom: 4px;
-  }
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  line-height: 1.45;
+}
 
   .label {
-    display: block;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: #C5A059;
-    font-weight: 800;
-    margin-bottom: 2px;
-  }
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #333;
+  width: 155px;
+}
+
 
   .value {
-    font-size: 18px;
-    font-weight: 600;
-    color: #0F172A;
-  }
+  font-weight: 800;
+  font-size: 19px;
+  color: #000;
+}
+
+.dots {
+  width: 130px;
+  border-bottom: 1px dotted #bbb;
+  margin: 0 10px 4px 10px;
+}
 
   /* Full width fields */
   .full-width {
@@ -236,17 +249,25 @@ exports.generateCertificateImage = async ({
 
   /* ================= FOOTER ================= */
   .footer {
-    background: #0F172A;
-    padding: 15px;
-    text-align: center;
-    color: #C5A059;
-  }
+  background: #C00000;
+  padding: 15px;
+  text-align: center;
+  color: #fff;
+}
 
-  .conclusion {
-    font-family: 'Cinzel', serif;
-    font-size: 20px;
-    letter-spacing: 1px;
-  }
+ .conclusion {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+  .media-block {
+  display: flex;
+  gap: 26px;              /* ↑ more gap between QR and photo */
+  align-items: flex-start;
+  width: 390px;           /* fixed block width */
+  margin-right: 20px;     /* creates right-side breathing space */
+}
+
 
 </style>
 </head>
@@ -255,49 +276,120 @@ exports.generateCertificateImage = async ({
     <div class="header">
       <img src="${logoUrl}" class="logo" />
       <div class="brand-text">
-        <div class="brand-name">GEMS & RUDRAKSH TESTING LAB</div>
-        <div class="brand-sub">ISO 9001:2015 Certified • Rishikesh, UK</div>
-      </div>
+  <div class="brand-name">GEMS & RUDRAKSH TESTING LAB</div>
+  <div class="brand-strip">
+    ISO 9001:2015 Certified • Rishikesh, UK
+  </div>
+</div>
+
       <div class="cert-badge">
         <div class="cert-label">Report Number</div>
         <div class="cert-number">${certificateId}</div>
       </div>
     </div>
 
-    <div class="main">
-      <div class="sidebar">
-        <div class="product-image-container">
-          ${productImage ? `<img src="${productImage}" />` : '<span style="color:#ccc">NO IMAGE</span>'}
-        </div>
-        <div class="qr-container">
-          <img src="http://localhost:5000${qrPath}" />
-          <div class="qr-hint">Scan to Verify Report</div>
-        </div>
-      </div>
+   <div class="main">
 
-      <div class="data-grid">
-        <div class="field"><span class="label">Weight</span><span class="value">${product.weightGrams}</span></div>
-        <div class="field"><span class="label">Shape</span><span class="value">${product.shape || "-"}</span></div>
-        <div class="field"><span class="label">Color</span><span class="value">${product.color || "-"}</span></div>
-        <div class="field"><span class="label">Measurement</span><span class="value">${product.measurement || "N/A"}</span></div>
-        
-        <div class="field"><span class="label">Mounted Status</span><span class="value">${product.mounted ? "Mounted in Metal" : "Loose Specimen"}</span></div>
-        
-        <div class="field"><span class="label">Faces (Mukhi)</span><span class="value">${product.faces || "-"}</span></div>
-        <div class="field"><span class="label">X-Ray Analysis</span><span class="value">${product.xRays || "-"}</span></div>
-        <div class="field"><span class="label">Test Type</span><span class="value">${product.test || "Standard Lab Test"}</span></div>
-        
-        <div class="field full-width"><span class="label">Created Faces</span><span class="value">${product.createdFace || "None Detected"}</span></div>
+  
 
-        <div class="comment-box full-width">
-          <span class="label">Expert Comments</span>
-          <span class="value" style="font-size: 14px; font-style: italic;">${product.comments || "All beads are confirmed natural."}</span>
-        </div>
-      </div>
+  <div class="data-grid">
+
+    ${product.weightGrams ? `
+      <div class="field">
+        <span class="label">Weight</span>
+        <span class="dots"></span>
+        <span class="value">${product.weightGrams}</span>
+      </div>` : ""}
+
+    ${product.shape ? `
+      <div class="field">
+        <span class="label">Shape</span>
+        <span class="dots"></span>
+        <span class="value">${product.shape}</span>
+      </div>` : ""}
+
+    ${product.color ? `
+      <div class="field">
+        <span class="label">Color</span>
+        <span class="dots"></span>
+        <span class="value">${product.color}</span>
+      </div>` : ""}
+
+    ${product.measurement ? `
+      <div class="field">
+        <span class="label">Measurement</span>
+        <span class="dots"></span>
+        <span class="value">${product.measurement}</span>
+      </div>` : ""}
+
+    ${typeof product.mounted === "boolean" ? `
+      <div class="field">
+        <span class="label">Mounted Status</span>
+        <span class="dots"></span>
+        <span class="value">${product.mounted}</span>
+      </div>` : ""}
+
+    ${product.faces ? `
+      <div class="field">
+        <span class="label">Faces (Mukhi)</span>
+        <span class="dots"></span>
+        <span class="value">${product.faces}</span>
+      </div>` : ""}
+
+    ${product.xRays ? `
+      <div class="field">
+        <span class="label">X-Ray Analysis</span>
+        <span class="dots"></span>
+        <span class="value">${product.xRays}</span>
+      </div>` : ""}
+
+    ${product.test ? `
+      <div class="field">
+        <span class="label">Test Type</span>
+        <span class="dots"></span>
+        <span class="value">${product.test}</span>
+      </div>` : ""}
+
+    ${product.createdFace ? `
+      <div class="field">
+        <span class="label">Created Faces</span>
+        <span class="dots"></span>
+        <span class="value">${product.createdFace}</span>
+      </div>` : ""}
+
+    ${product.comments ? `
+      <div class="field">
+        <span class="label">Comments</span>
+        <span class="dots"></span>
+        <span class="value">${product.comments}</span>
+      </div>` : ""}
+
+  </div>
+  <div class="media-block">
+    
+    <div class="qr-container">
+      <img src="http://localhost:5000${qrPath}" />
+      <div class="qr-hint">Scan to Verify</div>
+    </div>
+
+    <div class="product-image-container">
+      ${productImage ? `<img src="${productImage}" />` : '<span style="color:#ccc">NO IMAGE</span>'}
+    </div>
+
+  </div>
+
     </div>
 
     <div class="footer">
-      <div class="conclusion">IDENTIFIED AS: ${product.identification || "N/A"}</div>
+     ${
+       product.identification
+         ? `
+  <div class="conclusion">IDENTIFIED AS: ${product.identification}</div>
+`
+         : `
+  <div class="conclusion">IDENTIFIED AS</div>
+`
+     }
     </div>
   </div>
 </body>
@@ -310,7 +402,7 @@ exports.generateCertificateImage = async ({
   });
 
   const page = await browser.newPage();
-  
+
   // Set high resolution viewport
   await page.setViewport({
     width: 1400,
@@ -320,10 +412,13 @@ exports.generateCertificateImage = async ({
 
   await page.setContent(html, { waitUntil: "networkidle0" });
 
-  const outputPath = path.join(__dirname, `../../uploads/cert-${certificateId}.png`);
-  
+  const outputPath = path.join(
+    __dirname,
+    `../../uploads/cert-${certificateId}.png`,
+  );
+
   // Take screenshot of only the card
-  const element = await page.$('.card');
+  const element = await page.$(".card");
   await element.screenshot({ path: outputPath });
 
   await browser.close();

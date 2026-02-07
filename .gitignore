@@ -55,3 +55,4 @@ temp/
 
 # dotenv backups
 .env.backup
+scripts/
