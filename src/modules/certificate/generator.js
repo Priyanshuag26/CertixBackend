@@ -294,11 +294,11 @@ exports.generateCertificateImage = async ({
 
   <div class="data-grid">
 
-    ${product.weightGrams ? `
+    ${product.weight ? `
       <div class="field">
         <span class="label">Weight</span>
         <span class="dots"></span>
-        <span class="value">${product.weightGrams}</span>
+        <span class="value">${product.weight}</span>
       </div>` : ""}
 
     ${product.shape ? `
@@ -322,9 +322,9 @@ exports.generateCertificateImage = async ({
         <span class="value">${product.measurement}</span>
       </div>` : ""}
 
-    ${typeof product.mounted === "boolean" ? `
+    ${product.mounted  ? `
       <div class="field">
-        <span class="label">Mounted Status</span>
+        <span class="label">Mounted</span>
         <span class="dots"></span>
         <span class="value">${product.mounted}</span>
       </div>` : ""}
@@ -350,11 +350,39 @@ exports.generateCertificateImage = async ({
         <span class="value">${product.test}</span>
       </div>` : ""}
 
-    ${product.createdFace ? `
+    ${product.microscopicObservation ? `
       <div class="field">
-        <span class="label">Created Faces</span>
+        <span class="label">Microscopic Observation</span>
         <span class="dots"></span>
-        <span class="value">${product.createdFace}</span>
+        <span class="value">${product.microscopicObservation}</span>
+      </div>` : ""}
+
+    ${product.refractiveIndex? `
+      <div class="field">
+        <span class="label">Refractive Index</span>
+        <span class="dots"></span>
+        <span class="value">${product.refractiveIndex}</span>
+      </div>` : ""}
+
+    ${product.specificGravity ? `
+      <div class="field">
+        <span class="label">Specific Gravity</span>
+        <span class="dots"></span>
+        <span class="value">${product.specificGravity}</span>
+      </div>` : ""}
+    
+    ${product.hardness ? `
+      <div class="field">
+        <span class="label">Hardness</span>
+        <span class="dots"></span>
+        <span class="value">${product.hardness}</span>
+      </div>` : ""}
+
+    ${product.species ? `
+      <div class="field">
+        <span class="label">Species</span>
+        <span class="dots"></span>
+        <span class="value">${product.species}</span>
       </div>` : ""}
 
     ${product.comments ? `

@@ -43,7 +43,7 @@ exports.verifyProduct = async (productId) => {
   .update(
     JSON.stringify({
       productId: product.productId,
-      weightGrams: product.weightGrams,
+      weight: product.weight,
       faces: product.faces,                     // ✅ ADD THIS
       certificateId: certificate.certificateId,
     })
@@ -65,14 +65,13 @@ exports.verifyProduct = async (productId) => {
   data: {
     /* Product */
     productId: product.productId,
-    weightGrams: product.weightGrams,
+    weight: product.weight,
     shape: product.shape,
     color: product.color,
     measurement: product.measurement,
     mounted: product.mounted,
     faces: product.faces,
     xRays: product.xRays,
-    createdFace: product.createdFace,
     test: product.test,
     comments: product.comments,
     identification: product.identification,

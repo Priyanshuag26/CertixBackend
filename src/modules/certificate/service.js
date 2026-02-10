@@ -56,7 +56,7 @@ exports.generateCertificate = async (productId, adminId) => {
     .update(
       JSON.stringify({
         productId: product.productId,
-        weightGrams: product.weightGrams,
+        weight: product.weight,
         faces: product.faces,
         certificateId,
       })

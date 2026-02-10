@@ -10,56 +10,34 @@ const productSchema = new mongoose.Schema(
     },
 
     /* 🧪 PRODUCT / INSPECTION DATA */
-    weightGrams: {
-      type: Number,
+
+    // ✅ changed to string (unit included)
+    weight: {
+      type: String,
       required: true,
     },
 
-    shape: {
-      type: String,
-    },
+    shape: String,
+    color: String,
+    measurement: String,
+    mounted: String,
+    faces: String,
+    xRays: String,
+    test: String,
+    comments: String,
+    identification: String,
+    image: String,
 
-    color: {
-      type: String,
-    },
+    /* 🧬 NEW LAB TEST FIELDS */
 
-    measurement: {
-      type: String,
-    },
-
-    mounted: {
-      type: String,
-    },
-
-    faces: {
-      type: String,
-    },
-
-    xRays: {
-      type: String, // e.g. "Yes / No / NA" or report id
-    },
-
-    createdFace: {
-      type: String,
-    },
-
-    test: {
-      type: String, // test name or summary
-    },
-
-    comments: {
-      type: String,
-    },
-
-    identification: {
-      type: String,
-    },  
-
-    image: {
-      type: String, // image URL (S3 / Cloudinary)
-    },
+    microscopicObservation: String,
+    refractiveIndex: String,
+    specificGravity: String,
+    hardness: String,
+    species: String,
 
     /* 📌 SYSTEM FIELDS */
+
     status: {
       type: String,
       enum: ["DRAFT", "CERTIFIED", "REVOKED"],
@@ -75,5 +53,10 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/* INDEX */
+productSchema.index({ productId: 1 });
 
-module.exports = mongoose.model("Product", productSchema);
+/* ✅ SAFE EXPORT (prevents overwrite error with nodemon) */
+module.exports =
+  mongoose.models.Product ||
+  mongoose.model("Product", productSchema);
